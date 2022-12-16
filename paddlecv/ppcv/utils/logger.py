@@ -61,10 +61,10 @@ def setup_logger(name="ppcv", output=None):
             filename = os.path.join(output, "log.txt")
         if local_rank > 0:
             filename = filename + ".rank{}".format(local_rank)
-        os.makedirs(os.path.dirname(filename))
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
         fh = logging.FileHandler(filename, mode='a')
         fh.setLevel(logging.DEBUG)
-        fh.setFormatter(logging.Formatter())
+        fh.setFormatter(formatter)
         logger.addHandler(fh)
     logger_initialized.append(name)
     return logger

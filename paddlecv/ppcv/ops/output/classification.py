@@ -23,11 +23,13 @@ from collections import defaultdict
 from .base import OutputBaseOp
 from ppcv.utils.logger import setup_logger
 from ppcv.core.workspace import register
+from ...register import VISUALIZER
 
 logger = setup_logger('ClasOutput')
 
 
 @register
+@VISUALIZER.register
 class ClasOutput(OutputBaseOp):
     def __init__(self, model_cfg, env_cfg):
         super(ClasOutput, self).__init__(model_cfg, env_cfg)

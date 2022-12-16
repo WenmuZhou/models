@@ -12,5 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from .paddlecv import *
+from .ppcv.core.config import Config
+from .ppcv import register
+from .ppcv.register import Register
+from .ppcv.utils import init
+from .ppcv.engine.trainer import Trainer
+
+__all__ = ['PaddleCV', 'Config', 'init', 'register', 'Register', 'Trainer']
 
 __version__ = paddlecv.VERSION

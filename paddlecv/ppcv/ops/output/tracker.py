@@ -24,6 +24,7 @@ from .base import OutputBaseOp
 from .detection import draw_det
 from ppcv.utils.logger import setup_logger
 from ppcv.core.workspace import register
+from ...register import VISUALIZER
 from PIL import Image, ImageDraw, ImageFile
 
 logger = setup_logger('TrackerOutput')
@@ -64,6 +65,7 @@ def write_mot_results(filename, results, data_type='mot', num_classes=1):
 
 
 @register
+@VISUALIZER.register
 class TrackerOutput(OutputBaseOp):
     def __init__(self, model_cfg, env_cfg):
         super(TrackerOutput, self).__init__(model_cfg, env_cfg)

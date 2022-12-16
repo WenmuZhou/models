@@ -23,6 +23,7 @@ from collections import defaultdict
 from .base import OutputBaseOp
 from ppcv.utils.logger import setup_logger
 from ppcv.core.workspace import register
+from ...register import VISUALIZER
 
 logger = setup_logger('KptOutput')
 
@@ -118,6 +119,7 @@ def draw_kpt(image, keypoints, visual_thresh=0.6, ids=None):
 
 
 @register
+@VISUALIZER.register
 class KptOutput(OutputBaseOp):
     def __init__(self, model_cfg, env_cfg):
         super(KptOutput, self).__init__(model_cfg, env_cfg)

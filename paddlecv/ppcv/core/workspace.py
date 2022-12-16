@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and   
 # limitations under the License.
 
-import os
+import warnings
 
 __all__ = ['register', 'create']
 
@@ -27,8 +27,8 @@ def register(cls):
     Returns: cls
     """
     if cls.__name__ in global_config:
-        raise ValueError("Module class already registered: {}".format(
-            cls.__name__))
+        warnings.warn("Module {} already registered, It is now updated to {}".
+                      format(cls.__name__, cls))
     global_config[cls.__name__] = cls
     return cls
 

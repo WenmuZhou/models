@@ -26,11 +26,13 @@ from collections import defaultdict
 from .base import OutputBaseOp
 from ppcv.utils.logger import setup_logger
 from ppcv.core.workspace import register
+from ...register import VISUALIZER
 
 logger = setup_logger('FeatureOutput')
 
 
 @register
+@VISUALIZER.register
 class FeatureOutput(OutputBaseOp):
     def __init__(self, model_cfg, env_cfg):
         super().__init__(model_cfg, env_cfg)

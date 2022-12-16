@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and   
 # limitations under the License.
 
-from . import workspace
-from .workspace import *
-
-__all__ = workspace.__all__
+from . import config
+from .config import *
+__all__ = config.__all__

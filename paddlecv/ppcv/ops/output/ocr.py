@@ -22,6 +22,7 @@ from PIL import Image, ImageDraw, ImageFont
 from .base import OutputBaseOp
 from ppcv.utils.logger import setup_logger
 from ppcv.core.workspace import register
+from ...register import VISUALIZER
 from ppcv.utils.download import get_font_path
 
 logger = setup_logger('OCROutput')
@@ -41,6 +42,7 @@ def draw_boxes(img, boxes):
 
 
 @register
+@VISUALIZER.register
 class OCRTableOutput(OutputBaseOp):
     def __init__(self, model_cfg, env_cfg):
         super(OCRTableOutput, self).__init__(model_cfg, env_cfg)

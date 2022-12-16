@@ -25,6 +25,7 @@ from PIL import Image
 
 from ppcv.utils.logger import setup_logger
 from ppcv.core.workspace import register
+from ...register import VISUALIZER
 
 from .base import OutputBaseOp
 
@@ -32,6 +33,7 @@ logger = setup_logger('SegOutput')
 
 
 @register
+@VISUALIZER.register
 class SegOutput(OutputBaseOp):
     def __init__(self, model_cfg, env_cfg):
         super().__init__(model_cfg, env_cfg)

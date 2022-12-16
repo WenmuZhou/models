@@ -39,6 +39,8 @@ from ppcv.utils.logger import setup_logger
 
 logger = setup_logger()
 
+__all__ = ['PaddleCV']
+
 
 class PaddleCV(object):
     def __init__(self,

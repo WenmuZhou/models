@@ -89,9 +89,11 @@ class Trainer(object):
             **self.global_cfg) if 'PostProcess' in self.cfg else None
 
         # build Visualizer
-        self.visualizer = VISUALIZER.build(
-            self.cfg['Visualizer'],
-            **self.global_cfg) if 'visualizer' in self.cfg else None
+        if 'Visualizer' in self.cfg and self.test_dataloader is not None:
+            self.visualizer = VISUALIZER.build(
+                self.cfg['Visualizer'], mode='train', **self.global_cfg)
+        else:
+            self.visualizer = None
 
         # build Metric
         self.metric = METRIC.build(self.cfg[
@@ -142,8 +144,6 @@ class Trainer(object):
                 models=self.model,
                 optimizers=self.optimizer,
                 level=self.amp.get('amp_level', 'O2'))
-        else:
-            self.scaler = None
 
         # init ema
         ema_cfg = self.cfg.get('Ema', None)
@@ -397,19 +397,15 @@ class Trainer(object):
             self.model.train()
             self.status['steps_per_epoch'] = len(self.eval_dataloader)
 
-    def test(self,
-             images,
-             draw_threshold=0.5,
-             output_dir='output',
-             save_results=False,
-             visualize=True):
+    def test(self, output_dir='output', visualize=True):
         os.makedirs(output_dir, exist_ok=True)
 
         with paddle.no_grad():
             self.status['mode'] = 'test'
+            self.status['steps_per_epoch'] = len(self.test_dataloader)
             self.compose_callback.on_epoch_begin(self.status)
             self.model.eval()
-            for batch_step_id, data in enumerate(self.eval_dataloader):
+            for batch_step_id, data in enumerate(self.test_dataloader):
                 self.status['batch_step_id'] = batch_step_id
                 self.compose_callback.on_step_begin(self.status)
                 # forward
@@ -428,7 +424,10 @@ class Trainer(object):
                     outs, data) if self.postprocess is not None else outs
 
                 if visualize and self.visualizer is not None:
-                    res = self.visualizer(post_result)
+                    self.visualizer(
+                        post_result,
+                        data,
+                        test_dataloader=self.test_dataloader)
                 self.compose_callback.on_step_end(self.status)
 
     def build_dataloader(self, cfg):

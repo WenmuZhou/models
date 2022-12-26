@@ -23,7 +23,6 @@ from collections import defaultdict
 from .base import OutputBaseOp
 from ppcv.utils.logger import setup_logger
 from ppcv.core.workspace import register
-from ...register import VISUALIZER
 from PIL import Image, ImageDraw, ImageFile
 
 logger = setup_logger('DetOutput')
@@ -90,7 +89,6 @@ def draw_det(image, dt_bboxes, dt_scores, dt_cls_names, input_id=None):
 
 
 @register
-@VISUALIZER.register
 class DetOutput(OutputBaseOp):
     def __init__(self, model_cfg, env_cfg):
         super(DetOutput, self).__init__(model_cfg, env_cfg)

@@ -81,25 +81,35 @@ class AttrDict(dict):
         raise AttributeError("object has no attribute '{}'".format(key))
 
 
-def dict_merge(dct, merge_dct):
+def _merge_dict(config, merge_dct):
     """ Recursive dict merge. Inspired by :meth:``dict.update()``, instead of
     updating only top-level keys, dict_merge recurses down into dicts nested
     to an arbitrary depth, updating keys. The ``merge_dct`` is merged into
     ``dct``.
 
     Args:
-        dct: dict onto which the merge is executed
-        merge_dct: dct merged into dct
+        config: dict onto which the merge is executed
+        merge_dct: dct merged into config
 
     Returns: dct
     """
-    for k, v in merge_dct.items():
-        if (k in dct and isinstance(dct[k], dict) and
-                isinstance(merge_dct[k], Mapping)):
-            dict_merge(dct[k], merge_dct[k])
+    # for k, v in merge_dct.items():
+    #     if (k in dct and isinstance(dct[k], dict) and
+    #             isinstance(v, Mapping)):
+    #         _merge_dict(dct[k], v)
+    #     else:
+    #         dct[k] = v
+    for key, value in merge_dct.items():
+        sub_keys = key.split('.')
+        key = sub_keys[0]
+        if key in config and len(sub_keys) > 1:
+            _merge_dict(config[key], {'.'.join(sub_keys[1:]): value})
+        elif key in config and isinstance(config[key], dict) and isinstance(
+                value, Mapping):
+            _merge_dict(config[key], value)
         else:
-            dct[k] = merge_dct[k]
-    return dct
+            config[key] = value
+    return config
 
 
 def print_dict(cfg, print_func=print, delimiter=0):
@@ -152,16 +162,16 @@ class Config(object):
 
                 with open(base_yml) as f:
                     base_cfg = self._load_config_with_base(base_yml)
-                    all_base_cfg = dict_merge(all_base_cfg, base_cfg)
+                    all_base_cfg = _merge_dict(all_base_cfg, base_cfg)
 
             del file_cfg[self.BASE_KEY]
-            file_cfg = dict_merge(all_base_cfg, file_cfg)
+            file_cfg = _merge_dict(all_base_cfg, file_cfg)
         file_cfg['filename'] = os.path.splitext(os.path.split(file_path)[-1])[
             0]
         return file_cfg
 
     def merge_dict(self, args):
-        self.cfg = dict_merge(self.cfg, args)
+        self.cfg = _merge_dict(self.cfg, args)
 
     def print_cfg(self, print_func=print):
         """

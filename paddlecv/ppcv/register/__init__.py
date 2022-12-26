@@ -19,6 +19,14 @@ __all__ = [
     'VISUALIZER', 'CALLBACK', 'COLLATEFN', 'DATALOADER'
 ]
 
+
+def build_vis(cfg, op_cls):
+    try:
+        return op_cls(model_cfg={'Inputs': []}, env_cfg=cfg)
+    except Exception as e:
+        return op_cls(**cfg)
+
+
 # model
 MODEL = Register("model")
 TRANSFORM = Register('transform')
@@ -42,7 +50,7 @@ OPTIMIZER = Register("optimizer")
 POSTPROCESS = Register("postprocess")
 
 # Visualizer
-VISUALIZER = Register("visualizer")
+VISUALIZER = Register("visualizer", build_vis)
 
 # Callbacks
 CALLBACK = Register("callback")

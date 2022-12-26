@@ -157,9 +157,9 @@ class Register:
         for k, v in kwargs.items():
             if k not in _cfg:
                 _cfg[k] = v
-        if self._build_func is not None:
-            return self.build_func(_cfg)
         name = _cfg.pop('name')
         if name not in self._modules_dict:
             raise Exception('{} is not register in '.format(name, self))
+        if self._build_func is not None:
+            return self.build_func(_cfg, op_cls=self._modules_dict[name])
         return self._modules_dict[name](**_cfg)

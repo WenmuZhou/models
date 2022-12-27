@@ -92,7 +92,7 @@ class Register:
     def build_func(self):
         return self._build_func
 
-    def _add_single_module(self, module):
+    def _add_single_module(self, module, prefix=None):
         """
         Add a single module into the corresponding manager.
 
@@ -111,7 +111,8 @@ class Register:
 
         # Obtain the internal name of the module
         module_name = module.__name__
-
+        if prefix is not None:
+            module_name = '{}_{}'.format(prefix, module_name)
         # Check whether the module was added already
         if module_name in self._modules_dict.keys():
             warnings.warn("{} exists already! It is now updated to {} !!!".
@@ -122,7 +123,7 @@ class Register:
             # Take the internal name of the module as its key
             self._modules_dict[module_name] = module
 
-    def register(self, modules):
+    def register(self, prefix=None):
         """
         Add module(s) into the corresponding manager.
 
@@ -133,14 +134,16 @@ class Register:
             modules (function|class|list|tuple): Same with input modules.
         """
 
-        # Check whether the type is a sequence
-        if isinstance(modules, Sequence):
-            for module in modules:
-                self._add_single_module(module)
-        else:
-            self._add_single_module(modules)
+        def _register(modules):
+            # Check whether the type is a sequence
+            if isinstance(modules, Sequence):
+                for module in modules:
+                    self._add_single_module(module, prefix)
+            else:
+                self._add_single_module(modules, prefix)
+            return modules
 
-        return modules
+        return _register
 
     def build(self, cfg, **kwargs):
         """
@@ -159,7 +162,7 @@ class Register:
                 _cfg[k] = v
         name = _cfg.pop('name')
         if name not in self._modules_dict:
-            raise Exception('{} is not register in '.format(name, self))
+            raise Exception('{} is not register in {}'.format(name, self))
         if self._build_func is not None:
             return self.build_func(_cfg, op_cls=self._modules_dict[name])
         return self._modules_dict[name](**_cfg)

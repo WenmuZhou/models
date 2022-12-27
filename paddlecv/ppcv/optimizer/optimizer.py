@@ -31,7 +31,7 @@ from ppcv.utils.logger import setup_logger
 logger = setup_logger(__name__)
 
 
-@OPTIMIZER.register
+@OPTIMIZER.register()
 class OptimizerBuilder:
     """
     Build optimizer handles

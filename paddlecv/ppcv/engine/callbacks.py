@@ -31,7 +31,7 @@ __all__ = [
 ]
 
 
-@CALLBACK.register
+@CALLBACK.register()
 class Callback(object):
     def __init__(self, trainer):
         self.trainer = trainer
@@ -55,7 +55,7 @@ class Callback(object):
         pass
 
 
-@CALLBACK.register
+@CALLBACK.register()
 class ComposeCallback(object):
     def __init__(self, callbacks, **kwargs):
         self._callbacks = []
@@ -91,7 +91,7 @@ class ComposeCallback(object):
             c.on_train_end(status)
 
 
-@CALLBACK.register
+@CALLBACK.register()
 class LogPrinter(Callback):
     def __init__(self, trainer, **kwargs):
         super(LogPrinter, self).__init__(trainer)
@@ -182,7 +182,7 @@ class LogPrinter(Callback):
                 sample_num, sample_num / cost_time))
 
 
-@CALLBACK.register
+@CALLBACK.register()
 class Checkpointer(Callback):
     def __init__(self, trainer, main_indicator, **kwargs):
         super(Checkpointer, self).__init__(trainer)
@@ -249,7 +249,7 @@ class Checkpointer(Callback):
                            save_name, epoch_id + 1)
 
 
-@CALLBACK.register
+@CALLBACK.register()
 class VisualDLWriter(Callback):
     """
     Use VisualDL to log data or image
@@ -305,7 +305,7 @@ class VisualDLWriter(Callback):
         self.vdl_writer.close()
 
 
-@CALLBACK.register
+@CALLBACK.register()
 class WandbCallback(Callback):
     def __init__(self, trainer, **kwargs):
         super(WandbCallback, self).__init__(trainer)

@@ -14,6 +14,7 @@ os:
 - Ubuntu
 - CentOS
 - MacOS
+- Windows
 hardware:
 - type: CPU
   manufacturer: Intel

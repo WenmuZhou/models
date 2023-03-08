@@ -1,5 +1,5 @@
 name: PP-HumanSegV2
-description: PP-HumanSegV2实时人像分割SOTA方案
+description: PP-HumanSegV2模型，具有分割精度高、推理速度快、通用型强的优点。支持开箱即用，零成本部署到产品中，也支持针对特定场景数据进行微调，实现更佳分割效果。 # 要求在30~90字符之间，过段的描述需要适当扩充
 description_en: PP-HumanSegV2 real-time portrait segmentation solution
 from_repo: PaddleSeg
 tasks:
